@@ -1,0 +1,236 @@
+---
+title: "Data 605 Assignment Problems Week 6"
+author: "Warner Alexis"
+date: "2024-03-03"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Homework 6 
+1. A bag contains 5 green and 7 red jellybeans. How many ways can 5 jellybeans be withdrawn from the bag so that the number of green ones withdrawn will be less than 2?
+
+Lets calculate the combinaisons 
+$C(n,n) = \frac {n!}{(n- k)!$
+
+C(5,1)
+C(7,4)
+C(7,5)
+
+
+```{r}
+# we can draw 1 greenjelly where 1 can have a position out of 5 
+
+C1 = choose(5,1)
+C2 = choose(7,4)
+C3 = choose(7,5)
+
+cat("Choosing  1 greenjelly C(5,1) = ",C1)
+cat("for the remainding 4 spot filled with  greenjelly C(7,4) = ",C2)
+cat("Choosing no  greenjelly C(7,5) = ",C3)
+cat("The total ways to withdraw 5 greenjelly from the bag ", (C1*C2) + C3)
+
+
+```
+
+## 2 
+. A certain congressional committee consists of 14 senators and 13 representatives. How many ways can a subcommittee of 5 be formed if at least 4 of the members must be representatives?
+
+Lets calculate the combinaisons 
+$C(n,n) = \frac {n!}{(n- k)!$
+
+C(13,5)
+C(13,4)
+C(14,1) 
+
+```{r}
+C1 = choose(13,5)
+C2 = choose(13,4)
+C3 = choose(14,1)
+
+cat(" select 5 representatives from the 13 available C(13,5) = ",C1)
+cat("elect 4 representatives from the 13 available representatives C(13,4) = ",C2)
+cat("Choosing 1 senator from the 14 available senators C(14,1) = ",C3)
+cat("The total ways for a subcommittee of 5 be formed if at least 4 of the members ", (C2*C3) + C1)
+
+```
+## 3
+If a coin is tossed 5 times, and then a standard six-sided die is rolled 2 times, and finally a group of three cards are drawn from a standard deck of 52 cards without replacement, how many different outcomes are possible?
+
+Lets calculate the combinaisons 
+$C(n,n) = \frac {n!}{(n- k)!$
+
+C(52,3)
+
+
+```{r}
+C1 = choose(52,3)
+
+
+cat("  the number of ways to choose 3 cards out of 52 using C(52,3) = ",C1,"\n")
+
+
+
+cat("The total number of this outcomes is : ", 32*36* C1)
+```
+
+## 4
+3 cards are drawn from a standard deck without replacement. What is the probability that at least one of the cards drawn is a 3? Express your answer as a fraction or a decimal number rounded to four decimal places.
+
+Lets calculate the combinaisons 
+$C(n,n) = \frac {n!}{(n- k)!$
+
+C(48,3)
+C(52,3)
+
+
+```{r}
+# probability of choosing at leat 3 
+p_cards = choose(4,1) * choose(48,2)
+
+# Three of the cards is a 3 
+p_cd = choose(4,3)
+pd_cd1 = choose(4,2) * choose(48,1)
+
+## 3 card draw without replacement
+p_nocard = choose(52,3)
+P_total <- round((p_cards + p_cd + pd_cd1)/(choose(52,3)),4 )
+cat("the probability that at least one of the cards drawn is a 3 is approximately ",P_total,"\n")
+
+
+```
+
+## 5
+Lorenzo is picking out some movies to rent, and he is primarily interested in
+documentaries and mysteries. He has narrowed down his selections to 17
+documentaries and 14 mysteries.
+Step 1. How many different combinations of 5 movies can he rent?
+Answer: _______________
+Step 2. How many different combinations of 5 movies can he rent if he wants at least
+one mystery?
+
+
+Step 1 
+Lets calculate the combinaisons 
+$C(n,n) = \frac {n!}{(n- k)!$
+
+C(31,5)
+
+Step 2 
+
+Lets calculate the combinaisons 
+$C(n,n) = \frac {n!}{(n- k)!$
+
+C(17,5)
+
+
+```{r}
+cat("Choosing 5 movies out of 31 without regard to their type.g C(31,5) = ",choose(31,5),"\n")
+
+cat("Choosing 5 movies out of 17 without regard to their type.g C(31,5) = ",choose(17,5),"\n")
+```
+
+## 6
+In choosing what music to play at a charity fund raising event, Cory needs to have an equal number of symphonies from Brahms, Haydn, and Mendelssohn. If he is setting up a schedule of the 9 symphonies to be played, and he has 4 Brahms, 104 Haydn, and 17 Mendelssohn symphonies from which to choose, how many different schedules are possible? Express your answer in scientific notation rounding to the hundredths place
+
+Solution 
+
+Lets calculate the combinaisons 
+$C(n,n) = \frac {n!}{(n- k)!$
+
+4 Brahms For 3
+C(4,3)
+
+104 Haydn for 3
+C(104,3)
+
+
+```{r}
+cat("Selecting 3 symphonies ",choose(4,3),"\n") 
+cat("Selecting 3 symphonies from Haydn ",choose(104,3),"\n") 
+cat("Selecting 3 symphonies from Haydn ",choose(104,3),"\n") 
+cat("select 3 symphonies from Mendelssohn C(17,3) ",choose(17,3),"\n")
+
+cat("Total number of schedules is : ", choose(4,3) * choose(104,3) * choose(17,3))
+```
+## 7 
+An English teacher needs to pick 13 books to put on his reading list for the next school year, and he needs to plan the order in which they should be read. He has narrowed down his choices to 6 novels, 6 plays, 7 poetry books, and 5 nonfiction books.
+
+Step 1. If he wants to include no more than 4 nonfiction books, how many different reading schedules are possible? Express your answer in scientific notation rounding to the hundredths place.
+
+Step 2. If he wants to include all 6 plays, how many different reading schedules are possible? Express your answer in scientific notation rounding to the hundredths place.
+
+Solution 
+
+
+Number of novels: 6
+Number of plays: 6
+Number of poetry books: 7
+Number of nonfiction books:5
+So we have 24 books all together. 
+
+
+Lets calculate the combinaisons 
+$C(n,n) = \frac {n!}{(n- k)!$
+
+
+
+Total ways to choose 13 books out of 24
+C(24,13)
+
+Number of ways to select more than 4 nonfiction books: C(5,5)×C(19,8) 
+
+Remaining number of books to choose: 13 - 6 = 7
+
+Total number of ways to select the remaining 7 books from 18 (excluding the 6 plays):  C(18,7)
+
+
+
+
+```{r}
+#
+C1 = choose(24,13)
+C2 = choose(5,5) * choose(19,8)
+cat("Total numbers of schedules " ,C1 -(1*C2))
+
+#Step 2 
+
+cat(" Total number of schedules possible is: ", 6* choose(18,7))
+
+```
+
+## 8
+Zane is planting trees along his driveway, and he has 5 sycamores and 5 cypress trees to plant in one row. What is the probability that he randomly plants the trees so that all 5 sycamores are next to each other and all 5 cypress trees are next to each other? Express your answer as a fraction or a decimal number rounded to four decimal places.
+
+
+Solution
+
+```{r}
+cat("total number of possible arrangements to find the probability. ", (factorial(2)/factorial(10)))
+```
+
+If you draw a queen or lower from a standard deck of cards, I will pay you $4. If not, you pay me 16. (Aces are considered the highest card in the deck.)
+Step 1. Find the expected value of the proposition. Round your answer to two decimal places. Losses must be expressed as negative values.
+
+
+Step 2. If you played this game 833 times how much would you expect to win or lose?
+Round your answer to two decimal places. Losses must be expressed as negative
+
+Amount won = $4.
+Amount lost = -$16.
+
+```{r}
+
+# the expected value of the proposition is
+Exp_value <- round((2/13) *(4) + (11/13)*(-16),2)
+cat("The Expected Value: ", Exp_value)
+
+# If you play the game 833 times
+cat("The expected  losses is ", Exp_value*833)
+
+
+```
+

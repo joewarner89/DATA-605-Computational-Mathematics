@@ -1,0 +1,22 @@
+---
+title: "Discussion Week 2"
+author: "Warner Alexis"
+date: "2024-02-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Exercise c15
+
+
+Working within the vector space C3, determine if  matrix b =[4 3 1] is in the subspace of  matrix W = {[3 2 3],[1 0 3],[1 1 0],[2 1 3]} . Give me steps by steps calculations
+
+
+
+![Oicture](C:\Users\Warner_Beast\OneDrive\Documents\CUNY\DATA 605 - Computational Mathematics\Disscussion\IMG_4467.jpg)
+
+
+

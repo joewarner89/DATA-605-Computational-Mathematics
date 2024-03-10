@@ -1,0 +1,127 @@
+---
+title: "Data 605 Hwk 1"
+author: "Warner Alexis"
+date: "2024-01-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework 1
+
+(HW=Homework!)
+One of the most useful applications for linear algebra in data science is image manipulation.  We often need to compress, expand, warp, skew, etc. images.  To do so, we left multiply a transformation matrix by each of the point vectors.  
+For this assignment, build the first letters for both your first and last name using point plots in R.  For example, the following code builds an H.
+
+
+x=c(rep(0,500),seq(0,1,length.out=1000), rep(1,500))
+y=c(seq(-1,1,length.out=500),rep(0,1000), seq(-1,1,length.out=500))
+z=rbind(x,y)
+plot(y~x, xlim=c(-3,3), ylim=c(-3,3))
+
+
+Then, write R code that will left multiply (%*%) a square matrix (x) against each of the vectors of points (y). Initially, that square matrix will be the Identity matrix.  
+
+
+Use a loop that changes the transformation matrix incrementally to demonstrate 1) shear, 2) scaling, 3)  rotation , and 4) projection in animated fashion.  
+Hint:  Use x11() to open a new plotting window in R.
+Upload your document as an .RMD file.  I will know if your assignment is correct if the animation runs. correctly.
+
+
+```{r cars}
+library(animation)
+library(gifski)
+
+# creating the first two iniatials W and A 
+# write the initial of A
+x <- c(  rep(0,500), seq(-1,-1, length.out = 1000),# first horizontal line - W
+         rep(0,500), seq(1,1, length.out = 1000),# second horizontal line - E
+         rep(0,500), seq(-1,0, length.out = 1000), # first diagonal - W
+         rep(0,500), seq(0,1, length.out = 1000),
+         
+         rep(0,500), seq(2.5,3.5, length.out = 200),# third horizontal line - E
+         rep(0,500), seq(2,3, length.out = 1000), # first diagonal - X
+         rep(0,500), seq(3,4, length.out = 1000)) # second diagonal - X 
+
+y <- c( rep(0,500), seq(-1,2, length.out = 1000),# third horizontal line# third horizontal line - E
+        rep(0,500), seq(-1,2, length.out = 1000),
+        rep(0,500), seq(-1,1, length.out = 1000), # first diagonal - X
+        rep(0,500), seq(1,-1, length.out = 1000),
+        
+        rep(0,500), seq(0,0, length.out = 200),# third horizontal line# third horizontal line - E
+        rep(0,500), seq(-1,1, length.out = 1000), # first diagonal - X
+        rep(0,500), seq(1,-1, length.out = 1000)) # second diagonal - X
+
+# matrix
+z = rbind(x, y)
+
+# initital plot
+plot(y~x, xlim=c(-1,4), ylim=c(-2,4), col = "blue",
+     main = "Initials")
+
+```
+
+## Initial Plot Transformation
+
+This is the loop that changes the transformation matrix incrementally to demonstrate 1) shear, 2) scaling, 3)  rotation , and 4) projection in animated fashion.  
+
+## Shear Plot
+```{r pressure, echo=FALSE}
+for (val in seq(-3,3, length.out=50)) {
+  matrix_shear <- matrix(c(2,0, val, 1), nrow = 2, ncol = 2)
+  matrix_shr <- apply(z, 2, function(x) x %*% matrix_shear)
+  plot(matrix_shr[2,] ~ matrix_shr[1,], xlim= c(-6,12), ylim=c(-6,12),
+       col='blue', main="Shear Method")
+}
+```
+
+## Scaling 
+
+
+```{r}
+
+scaling_obj <- diag(2)
+ani.options(interval = 1/20)
+for (i in seq(-3-3, length.out = 50)){
+  scaling_obj[1,1] <- i
+  scaling_obj[2,2] <- i
+  new_obj <- apply(z, 2,function(x) scaling_obj%*%x)
+  plot(new_obj[2,] ~ new_obj[1,], xlim = c(-6,12), ylim=c(-6,12),
+       col= 'blue', main = "Scaling Method")
+}
+
+```
+
+
+## Rotation
+
+
+  
+
+
+```{r}
+scaling_obj <- diag(2)
+ani.options(interval = 1/20)
+for (i in seq(-3,3, length.out = 100)){
+  scaling_obj[1,1] <- i 
+  new_obj <- apply(z, 2, function(x) scaling_obj %*% x)
+  plot(new_obj[2,] ~ new_obj[1,], xlim=c(-6,12), ylim=c(-6,12),
+       col= 'blue', main = "Rotation Method")
+}
+```
+
+## Projection 
+
+```{r}
+for (val in seq(-3,3, length = 100)){
+  projection <- rbind(z,numeric(3000))
+  proje_matrix <- matrix(c(val,0,0,0,1,0,0,0,1), nrow = 3, ncol = 3)
+  proj_m <- apply(projection, 2, function(x) x %*% proje_matrix)
+  plot(proj_m[2,] ~ proj_m[1,],xlim=c(-6,12), ylim=c(-6,12),
+       col= 'blue', main = "Projection Method")
+}
+
+```
+

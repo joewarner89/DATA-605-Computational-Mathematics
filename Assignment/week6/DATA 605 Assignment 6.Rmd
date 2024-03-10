@@ -1,0 +1,25 @@
+---
+title: "Assign 5"
+author: "Warner Alexis"
+date: "2024-03-03"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Exercise 1 page 88
+1.  Four people are to be arranged in a row to have their picture taken.      In how many ways can this be done?
+
+## Solution 
+Four can be arrange of the folowing order
+
+$P(n,n) = \frac {n!}{(n- k)!}$
+$P(4,4) = \frac {4!}{4-4}!$
+$P(4,4) = \frac {4*3*2*1}{0}!$
+$P(4,4) = 24$
+
+There are 24 ways to arange 4 people. 
