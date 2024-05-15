@@ -1,0 +1,45 @@
+---
+title: "data 605 disc week 14"
+author: "Warner Alexis"
+date: "2024-05-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Exercise 8.8 
+
+Problems
+Key Idea 8.8.1 gives the $n^{th}$ term of the Taylor series of common
+functions. In Exercises 3 – 6, verify the formula given in
+the Key Idea by finding the first few terms of the Taylor series
+of the given function and identifying a pattern.
+
+3. $f(x) = e^x; c = 0$
+
+
+```{r}
+library(calculus)
+myf=function(x) exp(x)
+taylor(myf, var=c(x=0), order=6)
+```
+
+
+
+4. $f(x) = sin x ; c = 0$
+
+```{r}
+
+myf=function(x) sin(x)
+taylor(myf, var=c(x=0), order=6)
+```
+
+6. $f(x) = tan x; c= 0$
+
+```{r}
+myf=function(x) tan(x)
+taylor(myf, var=c(x=0), order=6)
+```
+

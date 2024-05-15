@@ -1,0 +1,84 @@
+---
+title: "DATA 605 Assignment 9"
+author: "Warner Alexis"
+date: "2024-03-25"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Excercise 11 page 363
+A tourist in Las Vegas was attracted by a certain gambling game in which
+the customer stakes 1 dollar on each play; a win then pays the customer
+2 dollars plus the return of her stake, although a loss costs her only her stake.
+Las Vegas insiders, and alert students of probability theory, know that the
+probability of winning at this game is 1/4. When driven from the tables by
+hunger, the tourist had played this game 240 times. Assuming that no near
+miracles happened, about how much poorer was the tourist upon leaving the
+casino? What is the probability that she lost no money?
+
+
+## Solution 
+
+
+Lets $X_n = Y_n + 1$ $Y_n$ is an independent  random variables having a mean $\mu = 0$
+```{r}
+sd <- sqrt(365*.25) #will use this for sd for a, b, & c
+q <- 100-100
+pr  <- pnorm(q, 0, sd, lower.tail = FALSE)
+cat("the probability that Y365 is ≥ 100: ", pr, "\n")
+
+
+# calculating x as : (value - mean)/sqrt(n)
+mean <- 0
+variance <- 1/4
+sd <- sqrt(variance)
+n <- 364
+
+q2 <- (110 - 100)/sqrt(n)
+cat("the probability that Y365 is ≥ 110: ",pnorm(q2, mean = mean, sd = sd, lower.tail = FALSE),"\n")
+
+
+## calculating x as : (value - mean)/sqrt(n)
+q3 <- (120 - 100)/sqrt(n)
+cat("the probability that Y365 is ≥ 120: ",pnorm(q3, mean = mean, sd = sd, lower.tail = FALSE),"\n")
+```
+## Question 2 
+Moment generating function $Mz(t) = Ee^{tx}f(x)$ 
+Binomial distribution function: 
+$P(x) = \sum_{j=0} \dbinom{n}{x}p^xq^{(n-x)}$
+$P(x) = \sum_{j=0} \dbinom{n}{x}(pe^t)q^{(n-x)}$
+$P(x) = (pe^t)q)^n$
+$g'(t) = n(pe^t + q)^{n-1}pe^t$
+$g'(0) = n(p + q)^{n-1}p$
+$g'(0) = np$
+                                
+   then, 
+                                $g′′(0)=n(n−1)p^2+np$
+                                $Var=n(n−1)p^2+np−(np)^2$
+                                $=(n^2−n)(p^2)+np−n^2p^2$
+                                $=np(1−p)$
+                                
+## Question 3
+Calculate the expected value and variance of the exponential distribution using the moment generating function.
+                                $G(t) = \int_{0}^\infty e^{tx} \lambda e^{- \lambda x}dx$
+                                $\frac {\lambda(e^{(t- \lambda)} }{t- \lambda} \vert_0 ^\infty$
+                                $\frac {\lambda}{\lambda - t}$
+                                $g′(t) = \frac {\lambda}{(\lambda - t)^2}$
+                                $g′(0) = \frac {\lambda}{(\lambda)^2}$
+                                $g′(0) = \frac {1}{\lambda}$
+                                
+The second derivative evaluated at 0, and the square of the first derivative evaluated at 0. 
+                                $g"(t) = \frac {2\lambda}{(\lambda - t)^3}$
+                                $g′(0) = \frac {2\lambda}{(\lambda)^3}$
+                                $g′(0) = \frac {2}{(\lambda)^2}$
+                                $Var = \frac {2}{(\lambda)^2} - ( \frac {1}{\lambda} )^2$
+                                $Var = \frac {2}{\lambda^2} -  \frac {1}{\lambda}$
+                                $Var = \frac {1}{\lambda^2}$
+                                
+he variance of an exponential distribution is $\frac {1}{\lambda^2}$
+                                

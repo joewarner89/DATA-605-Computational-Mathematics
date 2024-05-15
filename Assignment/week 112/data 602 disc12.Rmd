@@ -1,0 +1,77 @@
+---
+title: "data"
+author: "Warner Alexis"
+date: "2024-04-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## dna analysis
+
+
+We are importing two data sets from Kaggle using DNA data set test and training sets. x and y variables seems to be well correlated so we expect the $R2$ to be close to 1.
+
+
+
+
+
+```{r}
+library(ggplot2) 
+library(dplyr)
+
+test <- read.csv('https://raw.githubusercontent.com/joewarner89/DATA-605-Computational-Mathematics/main/Assignment/week%2012/test.csv')
+
+train <- read.csv('https://raw.githubusercontent.com/joewarner89/DATA-605-Computational-Mathematics/main/Assignment/week%2012/train.csv')
+# Check for NA and missing values
+# is.na return a vector with value TT for missing values.
+numberOfNA = length(which(is.na(train)==T))
+if(numberOfNA > 0) {
+  cat('Number of missing values found: ', numberOfNA)
+  cat('\nRemoving missing values...')
+  train = train[complete.cases(train), ]
+}
+
+cor(train$x,train$y)
+```
+
+
+
+
+
+## Simple Linear Regression
+
+Both dna strands x and y are well correlated. x and y are well distributed.
+
+
+```{r}
+
+
+require(ResourceSelection)
+#summarize the data set
+kdepairs(train) 
+#creating the model 
+dna_lm <- lm(y~., data = train) 
+summary(dna_lm)
+```
+
+
+
+
+
+
+
+```{r}
+par(ask=F)
+par(mfrow=c(2,2))
+plot(dna_lm)
+hist(dna_lm$residuals)
+
+```
+
+
+
+
+The model acheives a $R^2$ = 0.9907 and low p-value that are significant for the model development. we can use this model to predict chromosome y from x from the DNA simple. All four plots in the summary statistics of the model suggest a good model.
+

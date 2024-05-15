@@ -1,0 +1,135 @@
+---
+title: "Data 605 Assignment Week 8"
+author: "Warner Alexis"
+date: "2024-03-18"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## page 303  number 11
+
+A company buys 100 lightbulbs, each of which has an exponential lifetime of
+1000 hours. What is the expected time for the rst of these bulbs to burn
+out? (See Exercise 10.)
+
+**Solution**
+
+Lets $(X_i - X_n)$ be independent variables with parameters $\lambda_i ...\lambda_n $
+$Pr(k|X_k = minX_i...X_n) = \frac {\lambda_k}{\lambda_i ...\lambda_n}$
+$\lambda_i = \frac {1}{1000}, \sum_{\lambda_i} =\frac{1}{10} $
+$\mu = 1000, n = 100$
+
+```{r}
+mu = 1000
+bulb_n = 100
+
+cat("The Expected time for the first of these bulbs to burn out is ", mu/bulb_n ,"hours ")
+```
+## page 303 # 14
+
+Particles are subject to collisions that cause them to split into two parts with
+each part a fraction of the parent. Suppose that this fraction is uniformly
+distributed between 0 and 1. Following a single particle through several splittings
+we obtain a fraction of the original particle $Zn = X_1*X_2...X_n$ where
+each Xj is uniformly distributed between 0 and 1. Show that the density for
+the random variable $Z_n$ is
+
+$fn^(z^) = \frac {1}{(n-1)!}(-log z)^n-1$
+
+**Solution**
+
+Lets Z = X1 - X2 when z > 0 
+                            $z = x_1 - x_2$
+                            $x_2 = x_1 - z$
+                            $fZ(x) = \int_{\infty}^\infty f_x1(x_1) f_x2(x1 - z)dx_1$
+                            Solve it by exponential distribution
+                            $fX(x) = \lambda e ^{-\lambda x}$
+                            $\int_{0}^\infty \lambda ^{2\lambda x_1} \lambda e ^{-\lambda (x_1 - z)} dx_1$
+                            $\int_{0}^\infty \lambda ^2e^{\lambda( -2x_1 + \lambda z)}  dx_1$
+                            $\int_{0}^\infty \lambda ^2e^{\lambda (z-2x_1)}dx_1$
+                            $(1/2)\lambda 2^{-\lambda(z)}$
+                            
+##   page 320-321   
+
+A fair coin is tossed 100 times. The expected number of heads is 50, and the
+standard deviation for the number of heads is (100  1=2  1=2)1=2 = 5. What
+does Chebyshev's Inequality tell you about the probability that the number
+of heads that turn up deviates from the expected number 50 by three or more
+standard deviations (i.e., by at least 15)?
+
+**Solution**
+
+Suppose that we have the following input:
+                          $\mu = 10 , variance = 100/3$
+                          $P(|X-\mu|)  >= k\sigma \le \frac {\sigma^2}{k^2\sigma^2} = \frac {1}{k^2}$
+                          $P(|X-10|)  >= 2 \le \frac {1}{2^2} $ 
+                          
+```{r}
+#MEan 
+mu = 10 
+# variance
+var = 100/3
+# Standard deviation 
+sd = sqrt(var)
+ksd = 2 
+k <- ksd / sd
+
+upper_bnd = 1/(k^2)
+
+
+cat("The the upper bound is ", upper_bnd,"\n")
+cat("The propability of the upper bound is ", pmin(upper_bnd))
+
+
+
+```
+  
+When $P(|X-10|)  >+ 5$ then we will have : 
+                          $P(|X-10|)  >= 5 \le \frac {1}{5^2} $
+                          
+```{r}
+sd_k  = 5 
+
+k <- 5 / sd
+upper_bnd = 1/(k^2)
+cat("The highest propability is  ", upper_bnd,"\n")
+cat("The propability of the upper bound is ", pmin(upper_bnd))
+
+```
+                        
+When $P(|X-10|)  >= 9$ then we will have : 
+                          $P(|X-10|)  >= 9 \le \frac {1}{9^2} $
+                          
+```{r}
+sd_k  = 9
+
+k <- sd_k / sd
+upper_bnd = 1/(k^2)
+cat("The highest propability is  ", upper_bnd,"\n")
+cat("The propability of the upper bound is ", pmin(upper_bnd))
+                          
+```
+                          
+ When $P(|X-10|)  >= 20$ then we will have : 
+                          $P(|X-10|)  >= 20 \le \frac {1}{20^2} $     
+                          
+                          
+```{r}
+sd_k  = 20 
+
+k <- sd_k / sd
+upper_bnd = 1/(k^2)
+cat("The highest propability is  ", upper_bnd,"\n")
+cat("The propability of the upper bound is ", pmin(upper_bnd))
+```
+                          
+                            
+
+
+
+

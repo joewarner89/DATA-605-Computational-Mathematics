@@ -1,0 +1,210 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={DATA 605 Assignment 9},
+  pdfauthor={Warner Alexis},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{DATA 605 Assignment 9}
+\author{Warner Alexis}
+\date{2024-03-25}
+
+\begin{document}
+\maketitle
+
+\hypertarget{excercise-11-page-363}{%
+\subsection{Excercise 11 page 363}\label{excercise-11-page-363}}
+
+A tourist in Las Vegas was attracted by a certain gambling game in which
+the customer stakes 1 dollar on each play; a win then pays the customer
+2 dollars plus the return of her stake, although a loss costs her only
+her stake. Las Vegas insiders, and alert students of probability theory,
+know that the probability of winning at this game is 1/4. When driven
+from the tables by hunger, the tourist had played this game 240 times.
+Assuming that no near miracles happened, about how much poorer was the
+tourist upon leaving the casino? What is the probability that she lost
+no money?
+
+\hypertarget{solution}{%
+\subsection{Solution}\label{solution}}
+
+Lets \(X_n = Y_n + 1\) \(Y_n\) is an independent random variables having
+a mean \(\mu = 0\)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sd }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\DecValTok{365}\SpecialCharTok{*}\NormalTok{.}\DecValTok{25}\NormalTok{) }\CommentTok{\#will use this for sd for a, b, \& c}
+\NormalTok{q }\OtherTok{\textless{}{-}} \DecValTok{100{-}100}
+\NormalTok{pr  }\OtherTok{\textless{}{-}} \FunctionTok{pnorm}\NormalTok{(q, }\DecValTok{0}\NormalTok{, sd, }\AttributeTok{lower.tail =} \ConstantTok{FALSE}\NormalTok{)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"the probability that Y365 is ≥ 100: "}\NormalTok{, pr, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## the probability that Y365 is ≥ 100:  0.5
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# calculating x as : (value {-} mean)/sqrt(n)}
+\NormalTok{mean }\OtherTok{\textless{}{-}} \DecValTok{0}
+\NormalTok{variance }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{/}\DecValTok{4}
+\NormalTok{sd }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(variance)}
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{364}
+
+\NormalTok{q2 }\OtherTok{\textless{}{-}}\NormalTok{ (}\DecValTok{110} \SpecialCharTok{{-}} \DecValTok{100}\NormalTok{)}\SpecialCharTok{/}\FunctionTok{sqrt}\NormalTok{(n)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"the probability that Y365 is ≥ 110: "}\NormalTok{,}\FunctionTok{pnorm}\NormalTok{(q2, }\AttributeTok{mean =}\NormalTok{ mean, }\AttributeTok{sd =}\NormalTok{ sd, }\AttributeTok{lower.tail =} \ConstantTok{FALSE}\NormalTok{),}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## the probability that Y365 is ≥ 110:  0.1472537
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\# calculating x as : (value {-} mean)/sqrt(n)}
+\NormalTok{q3 }\OtherTok{\textless{}{-}}\NormalTok{ (}\DecValTok{120} \SpecialCharTok{{-}} \DecValTok{100}\NormalTok{)}\SpecialCharTok{/}\FunctionTok{sqrt}\NormalTok{(n)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"the probability that Y365 is ≥ 120: "}\NormalTok{,}\FunctionTok{pnorm}\NormalTok{(q3, }\AttributeTok{mean =}\NormalTok{ mean, }\AttributeTok{sd =}\NormalTok{ sd, }\AttributeTok{lower.tail =} \ConstantTok{FALSE}\NormalTok{),}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## the probability that Y365 is ≥ 120:  0.01801584
+\end{verbatim}
+
+\hypertarget{question-2}{%
+\subsection{Question 2}\label{question-2}}
+
+Moment generating function \(Mz(t) = Ee^{tx}f(x)\) Binomial distribution
+function: \(P(x) = \sum_{j=0} \dbinom{n}{x}p^xq^{(n-x)}\)
+\(P(x) = \sum_{j=0} \dbinom{n}{x}(pe^t)q^{(n-x)}\) \(P(x) = (pe^t)q)^n\)
+\(g'(t) = n(pe^t + q)^{n-1}pe^t\) \(g'(0) = n(p + q)^{n-1}p\)
+\(g'(0) = np\)
+
+then, \(g′′(0)=n(n−1)p^2+np\) \(Var=n(n−1)p^2+np−(np)^2\)
+\(=(n^2−n)(p^2)+np−n^2p^2\) \(=np(1−p)\)
+
+\hypertarget{question-3}{%
+\subsection{Question 3}\label{question-3}}
+
+Calculate the expected value and variance of the exponential
+distribution using the moment generating function.
+\(G(t) = \int_{0}^\infty e^{tx} \lambda e^{- \lambda x}dx\)
+\(\frac {\lambda(e^{(t- \lambda)} }{t- \lambda} \vert_0 ^\infty\)
+\(\frac {\lambda}{\lambda - t}\)
+\(g′(t) = \frac {\lambda}{(\lambda - t)^2}\)
+\(g′(0) = \frac {\lambda}{(\lambda)^2}\) \(g′(0) = \frac {1}{\lambda}\)
+
+The second derivative evaluated at 0, and the square of the first
+derivative evaluated at 0. \(g"(t) = \frac {2\lambda}{(\lambda - t)^3}\)
+\(g′(0) = \frac {2\lambda}{(\lambda)^3}\)
+\(g′(0) = \frac {2}{(\lambda)^2}\)
+\(Var = \frac {2}{(\lambda)^2} - ( \frac {1}{\lambda} )^2\)
+\(Var = \frac {2}{\lambda^2} - \frac {1}{\lambda}\)
+\(Var = \frac {1}{\lambda^2}\)
+
+he variance of an exponential distribution is \(\frac {1}{\lambda^2}\)
+
+\end{document}

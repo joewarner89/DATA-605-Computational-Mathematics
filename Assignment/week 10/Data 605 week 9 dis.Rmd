@@ -1,0 +1,30 @@
+---
+title: "Data 605 Dis Week 9"
+author: "Warner Alexis"
+date: "2024-03-24"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## page 338 ex 1 
+Let S100 be the number of heads that turn up in 100 tosses of a fair coin. Use
+the Central Limit Theorem to estimate
+
+```{r}
+n <- 100 # trails number 
+p <- 0.5 # prob of success 
+
+# P(S100 <= 45)
+cat("The centraol Limit Theorem  P(S100 <= 45)", pbinom(45, size = n, prob = p))
+
+cat("The centraol Limit Theorem  P(45 < S100 < 55) =", pbinom(55, size = n, prob = p) - pbinom(45, size = n, prob = p),"n")
+cat("The centraol Limit Theorem  P(S100 > 63) =", 1 - pbinom(63, size = n, prob = p),"\n")
+cat("The centraol Limit Theorem  P(S100 < 57) =", pbinom(56, size = n, prob = p),"\n")
+
+
+
+```
+

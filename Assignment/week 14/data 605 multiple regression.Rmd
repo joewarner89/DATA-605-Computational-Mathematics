@@ -1,0 +1,171 @@
+---
+title: "DATA 605 Multiple Regression"
+author: "Warner Alexis"
+date: "2024-04-14"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data Analysis
+The attached who.csv dataset contains real-world data from 2008. The variables included follow:
+
+>  Country: name of the country
+
+>  LifeExp: average life expectancy for the country in years
+
+>  InfantSurvival: proportion of those surviving to one year or more
+>  Under5Survival: proportion of those surviving to five years or more
+>  TBFree: proportion of the population without TB.
+>  PropMD: proportion of the population who are MDs
+>  PropRN: proportion of the population who are RNs
+>  PersExp: mean personal expenditures on healthcare in US dollars at average exchange rate
+>  GovtExp: mean government expenditures per capita on healthcare, US dollars at average exchange rate
+>  TotExp: sum of personal and government expenditures.
+
+
+
+
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(cowplot)
+library(car)
+
+library(corrplot)
+
+data <- read.csv('who.csv', stringsAsFactors = F)
+head(data)
+str(data)
+summary(data)
+
+
+```
+
+
+```{r}
+
+
+
+ggplot(data, aes(x = LifeExp ,y = TotExp)) + 
+  geom_point() +
+  labs(x = "Average Life Expectancy", y = "Total Average Healthcare Expenditure") +
+  geom_smooth(method=lm)
+```
+
+
+```{r}
+set.seed(123)
+linear_lm  <- lm(LifeExp ~ TotExp, data= data)
+summary(linear_lm)
+```
+pvalue for TotExp is very small which is lower than 0.05 indicates that it is significant for the prefiction of the LifeExp. the adjusted R-squared 0.2537 is too low which show us that the model need a lot of more works. We can assume there is a linear relationship betwen the feature and the target variables, but not a strong one since thye model has low pvalue. 
+
+
+```{r}
+
+x_e = 4.6
+y_e = 0.06
+df <- data %>% 
+  mutate(LifeExpT = LifeExp^x_e,
+         TotExpT = TotExp^y_e)
+
+
+ggplot(df, aes(x = LifeExpT ,y = TotExpT)) + 
+  geom_point() +
+  labs(x = "Average Life Expectancy", y = "Total Average Healthcare Expenditure") +
+  geom_smooth(method=lm)
+
+```
+
+
+
+
+
+
+```{r}
+set.seed(123)
+linear_lm2 <- lm(LifeExpT ~ TotExpT, data= df)
+summary(linear_lm2)
+
+
+
+```
+
+
+pvalue is significantly low which means TotExpT is a statistically significant predictor of LifeExpT. The Rsquare value is close to 1 which means the model did very good and we can use it predict LifeExpT. The feature variable and target variables (LifeExpT ~ TotExpT)  has a correlation of 0.85 which means they are related. The residual from y axis are scatted randomly. We can see most fitted value has good correlated with a residual. 
+
+
+```{r}
+ctrd <- cor(df[, sapply(df, is.numeric)])
+corrplot(ctrd
+         , method = 'color' # I also like pie and ellipse
+         , order = 'hclust' # Orders the variables so that ones that behave similarly are placed next to each other
+         , addCoef.col = 'black'
+         , number.cex = .6 # Lower values decrease the size of the numbers in the cells
+)
+         
+         
+par(mfrow = c(2, 2), mar = c(2,2,2,2))
+plot(linear_lm2)
+
+
+
+```
+
+
+
+```{r}
+
+
+prediction1 <- predict(linear_lm2, newdata = data.frame(TotExpT = 1.5))^(1/4.6)
+prediction2 <- predict(linear_lm2, newdata = data.frame(TotExpT = 2.5))^(1/4.6)
+cat(
+  'Prediction with 1.5: ',
+  scales::comma(prediction1),
+  '\nPrediction with 2.5: ',
+  scales::comma(prediction2),
+  sep = ''
+)
+
+
+```
+
+
+
+
+
+```{r}
+
+set.seed(123)
+multiple_lm <- lm(LifeExp ~ PropMD + TotExp + PropMD:TotExp, data= data)
+summary(multiple_lm)
+
+
+par(mfrow = c(2, 2), mar = c(2,2,2,2))
+plot(multiple_lm)
+
+```
+
+the Rsquare is 0.3471 which means the model didn't perfom better that the previous model. we need more work to evaluate the model and do hyperprameters tiunning on the features. The residuals are clustered on the y-axis which means the model didn't predict the value corerctly.
+
+
+
+```{r}
+newdata = data.frame(PropMD = 0.03, TotExp = 14)
+predict(multiple_lm, newdata = newdata)
+
+
+```
+
+
+
+Based on the life expextancy recorded in the databased, the presiction seems to be irrelevant because the model didnt do a good job. The predicted life expancy is way higher than the one in the dataset 
+
+
+

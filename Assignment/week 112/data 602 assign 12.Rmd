@@ -1,0 +1,76 @@
+---
+title: "data 605 regression"
+author: "Warner Alexis"
+date: "2024-04-07"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Cars Regression Analysis
+
+We are going to a regression analysis on the car data set. 
+
+```{r}
+# import car dataset
+require(carData)
+library(dplyr)
+library(ggplot2)
+head(cars)
+dim(cars)
+require(ResourceSelection)
+
+kdepairs(cars)
+
+
+
+```
+There 50 observations and 2 features from the data set. speed seems to increase with driving long distance. the speed variable  is  distributed in the center while the dist variable is  distributed to the left. variables are well correlated with each other. they have a correlation of 0.807
+
+```{r}
+plot(cars[,"speed"],cars[,"dist"], main= "speed vs distance",
+     xlab="speed", ylab="Distance")
+# see how data is skewed 
+ggplot(cars, aes(x=speed)) +
+  geom_histogram(binwidth = 5, fill="grey", color="black") +
+  labs(title="Histogram of Car Speeds", x="Speed (mph)", y="Frequency") +
+  theme_minimal()
+
+```
+we are going to use regression to predict the cars speed using the distance variables. The correlation already shows that there is a  good relationship among the variables. Based on the summary, it takes a car going  0 mph to stop - 17 feet to stop. every time need need to stop, it need to an additional to 3.9324 feet to stop. 
+
+
+
+```{r}
+cars_model <- lm(dist ~ speed, data = cars)
+summary(cars_model)
+
+par(ask=F)
+par(mfrow=c(2,2))
+plot(cars_model)
+hist(cars_model$residuals)
+```
+
+
+
+This fitted values graph shows a good relations between fitted values and and residual values. there are only 3 outliers which are 23, 35, 49. The data appear to be well modeled by a linear relationship between speed
+ and dist, and the points appear to be randomly spread out about the line, with no discernible non-linear trends or indications of non-constant variance.
+
+
+
+```{r}
+par(ask=F)
+par(mfrow=c(2,2))
+plot(cars_model)
+plot(fitted(cars_model, resid(cars_model)))
+qqnorm(resid(cars_model))
+qqline(resid(cars_model))
+
+
+```
+
+ Both features have good relationship  , but we can use other evaluation techniques to improve the $R^2$ from 0.6511 to better score. 

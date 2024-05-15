@@ -1,0 +1,46 @@
+---
+title: "Data 602 Disc 9"
+author: "Warner Alexis"
+date: "2024-04-01"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## p422 ex2 
+In Example 11.4, let a = 0 and b = 1=2. Find$ P; P^2; and P^3: $What would
+Pn be? What happens to Pn as n tends to infinity? Interpret this result.
+
+## Solution 
+Lets find $ P; P^2; and P^3:$
+a = 0 ; b = 1/2
+
+$P = \begin{bmatrix} 1 & 0 \\0 & \frac {1}{2}\end{bmatrix}$ 
+
+From state 1 (the first row), the system transitions to itself with probability 1 (since 
+
+a=0), and from state 2 (the second row), the system transitions back to state 1 with probability 0 and stays in state 2 with probability 
+$\frac {1}{2}$
+
+$P^2 = \begin{bmatrix} 1 & 0 \\0 & \frac {1}{2}\end{bmatrix} * \begin{bmatrix} 1 & 0 \\0 & \frac {1}{2}\end{bmatrix}$
+
+$P^2 = \begin{bmatrix} 1 & 0 \\0 & \frac {1}{4}\end{bmatrix}$
+
+$P^3 = P^2 * P$
+
+
+$P^3 = \begin{bmatrix} 1 & 0 \\0 & \frac {1}{4}\end{bmatrix}* \begin{bmatrix} 1 & 0 \\0 & \frac {1}{2}\end{bmatrix}  $
+
+
+$P^3 = \begin{bmatrix} 1 & 0 \\0 & \frac {1}{8}\end{bmatrix}$ 
+
+so $P^n$ is calculated by:
+$P^n = \begin{bmatrix} 1 & 0 \\0 & \frac {1}{2^n}\end{bmatrix}$
+
+as n tend to infinity  $\frac {1}{2^n}$ tends to end to zero Therefore, the elements of $P^n$ tend to:
+$P^n = \begin{bmatrix} 1 & 0 \\0 & 0\end{bmatrix}$
+
+
+

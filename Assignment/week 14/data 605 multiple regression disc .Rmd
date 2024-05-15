@@ -1,0 +1,72 @@
+---
+title: "data 605 discussion"
+author: "Warner Alexis"
+date: "2024-04-14"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data ANALysis 
+
+We are going to use the cars dataset from R studio. The dataset information is located below: 
+
+Description of dataset from R documentation
+> Name	Description
+> mpg	Miles/(US) gallon
+> cyl	Number of cylinders
+> disp	Displacement (cu.in.)
+> hp	Gross horsepower
+> drat	Rear axle ratio
+> wt	Weight (1000 lbs)
+> qsec	1/4 mile time
+> vs	Engine (0 = V-shaped, 1 = straight)
+> am	Transmission (0 = automatic, 1 = manual)
+> gear	Number of forward gears
+> carb	Number of carburetors
+
+
+```{r}
+data <- mtcars
+library(ggplot2)
+library(dplyr)
+
+data$vs <- factor(data$vs)
+data$am <- factor(ifelse(data$am == 0, "automatic", "manual"))
+data$gear <- factor(data$gear)
+data$carb <- factor(data$carb)
+```
+
+
+
+we are going to see visual distribution of the target varaiable 
+
+```{r}
+
+ggplot(data, aes(am, mpg, fill = am)) + 
+  geom_boxplot() +
+  labs(x = "", y = "Miles Per Gallon") + 
+  theme(legend.position = "none")
+```
+
+
+```{r}
+set.seed(123)
+model <- lm(mpg ~., data = mtcars)
+summary(model)
+```
+We are going to compute the best model for car dataset. 
+
+```{r}
+best_model <- step(model, direction = "both")
+summary(best_model)
+```
+
+```{r}
+par(mfrow=c(2, 2))
+plot(best_model)
+```
+
+We have improve the Rsquare based on the selection of the features we choose in the second model and the value for best model is lower which means the model actually work well to predict the target variable. The residuals vs fitted plot show that residuals are scattered proprerly in y-axis. The residuals are not overfitting.  

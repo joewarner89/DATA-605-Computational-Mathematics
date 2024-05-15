@@ -1,0 +1,58 @@
+---
+title: "data 605 hw 14"
+author: "Warner Alexis"
+date: "2024-05-05"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## ASSIGNMENT 14 - TAYLOR SERIES
+This week, we’ll work out some Taylor Series expansions of popular functions
+
+$f(x) = \frac {1}{(1-x)}$
+
+
+```{r}
+library(calculus)
+myf=function(x) 1/(1-x)
+taylor(myf, var=c(x=1), order=6)
+```
+
+
+for this expression:
+
+
+$f(x) = e^x$
+
+```{r}
+myf=function(x) exp(x)
+taylor(myf, var=c(x=1), order=6)
+```
+
+
+for the expression :
+$f(x) = ln(1+x)$
+
+```{r}
+myf=function(x) log1p(x)
+taylor(myf, var=c(x=1), order=6)
+
+```
+
+
+
+for the expression:
+$f(x) = x^{(1/2)}$
+
+```{r}
+myf=function(x) x^(1/2)
+taylor(myf, var=c(x=1), order=6)
+
+```
+
+

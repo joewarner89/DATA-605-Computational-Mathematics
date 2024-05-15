@@ -1,0 +1,517 @@
+---
+title: "Data 605 Final Exam"
+author: "Warner Alexis"
+date: "2024-05-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Final Project 
+
+
+
+The House prices data set from Kaggle(https://www.kaggle.com/c/house-prices-advanced-regression-techniques) competition 80 variables for training set and 81 for testing set of possible sales made in Ames, Iowa. . 
+
+The house prices data set has some missing values and we are going to replace them with zero. 
+
+
+
+```{r}
+#load library 
+library(dplyr)
+library(ggplot2)
+library(ggthemes)
+library(corrplot)
+library(rsample)
+library(caret)
+library(tidyverse)
+library(janitor)
+# Arrange plots in a grid
+library(gridExtra)
+
+
+#load the data 
+#load data 
+train = read.csv("train.csv",stringsAsFactors = F)
+test = read.csv("test.csv",stringsAsFactors = F)
+
+#summary 
+summary(train)
+
+sum(is.na(train))
+#checking value with na
+colSums(is.na(train))
+# checking value with na for test 
+colSums(is.na(test))
+## fill na with zero 
+train[is.na(train)] <- 0
+test[is.na(test)] <- 0
+
+
+dim(train)
+dim(test)
+
+
+
+# selecxt x and y \
+X <- train$GrLivArea
+Y <-  train$SalePrice
+
+# Load the required library
+library(ggplot2)
+
+# Create a histogram for X (independent variable)
+ggplot(data = NULL, aes(x = X)) +
+  geom_histogram(binwidth = 50, fill = "lightblue", color = "black") +
+  labs(title = "Histogram of GrLivArea (Independent Variable)",
+       x = "GrLivArea",
+       y = "Frequency") +
+  theme_minimal()
+
+# Create a density plot for Y (dependent variable)
+ggplot(data = NULL, aes(x = Y)) +
+  geom_density(fill = "lightgreen", color = "black") +
+  labs(title = "Density Plot of SalePrice (Dependent Variable)",
+       x = "SalePrice",
+       y = "Density") +
+  theme_minimal()
+
+```
+
+## Probaility
+
+Lets Calculate as a minimum the below probabilities a through c.  Assume the small letter "x" is estimated as the 3d quartile of the X variable, and the small letter "y" is estimated as the 2d quartile of the Y variable.  Interpret the meaning of all probabilities.  In addition, make a table of counts as shown below.
+a.	$ P(X>x | Y>y)$		b. $ P(X>x, Y>y)$		c. $ P(X<x | Y>y)	$
+
+
+
+```{r}
+# Calculate the 2nd quartile of X and Y
+x_quartile2 <- quantile(X, probs = 0.50, na.rm = TRUE)
+y_quartile2 <- quantile(Y, probs = 0.50, na.rm = TRUE)
+
+# Calculate the 3rd quartile of X
+x_quartile3 <- quantile(X, probs = 0.75, na.rm = TRUE)
+
+# Categorize observations based on quartiles
+x_leq_2d_quartile <- sum(X <= x_quartile2)
+x_gt_2d_quartile <- sum(X > x_quartile2)
+x_leq_3d_quartile <- sum(X <= x_quartile3)
+x_gt_3d_quartile <- sum(X > x_quartile3)
+
+# Calculate counts for each category
+leq_2d_quartile_leq_3d_quartile <- sum(X <= x_quartile2 & Y <= y_quartile2)
+leq_2d_quartile_gt_3d_quartile <- sum(X <= x_quartile2 & Y > y_quartile2)
+gt_2d_quartile_leq_3d_quartile <- sum(X > x_quartile2 & Y <= y_quartile2)
+gt_2d_quartile_gt_3d_quartile <- sum(X > x_quartile2 & Y > y_quartile2)
+
+# Calculate totals
+total_leq_3d_quartile <- x_leq_3d_quartile
+total_gt_3d_quartile <- x_gt_3d_quartile
+total_leq_2d_quartile <- sum(leq_2d_quartile_leq_3d_quartile, leq_2d_quartile_gt_3d_quartile)
+total_gt_2d_quartile <- sum(gt_2d_quartile_leq_3d_quartile, gt_2d_quartile_gt_3d_quartile)
+total <- total_leq_3d_quartile + total_gt_3d_quartile
+
+# Fill out the table
+table_counts <- matrix(c(
+  leq_2d_quartile_leq_3d_quartile, leq_2d_quartile_gt_3d_quartile, total_leq_2d_quartile,
+  gt_2d_quartile_leq_3d_quartile, gt_2d_quartile_gt_3d_quartile, total_gt_2d_quartile,
+  total_leq_3d_quartile, total_gt_3d_quartile, total
+), nrow = 3, byrow = TRUE)
+
+# Assign column and row names
+colnames(table_counts) <- c("<=2d quartile", ">2d quartile", "Total")
+rownames(table_counts) <- c("<=3d quartile", ">3d quartile", "Total")
+
+# Print the table
+print(table_counts)
+```
+Definition 
+**GrLivArea**: Above Ground Living Area, measured in square feet. It encompasses the living area that is not in the basement.
+
+Properties with above ground living area that are inferior or equal to  3rd quartile and salesprices 2nd quartile (577 houses) represent houses that don't have a living basement. Those houses are placed in a more affordable area. 
+
+Properties with above ground living area that are inferior or equal to  3rd quartile and salesprices 2nd quartile (154 houses)  are most likely to located in low price or average price Areas based on the detail information available in the data set.
+
+
+Properties with above ground living area that are superior to  3rd quartile and salesprices 2nd quartile (155 houses) are most like to located in a upcoming neiborhoods where sale prices are increasing. 
+
+
+Properties with above ground living area that are superior to  3rd quartile and salesprices 2nd quartile (574 houses) are most like to
+the most expensive area to live in because they offer more living space and they are not counted toward the house measurements. 
+
+
+
+
+
+
+```{r}
+
+# probability for a b c 
+cat('a) P(X>x|Y>y) is ',(gt_2d_quartile_gt_3d_quartile/total)/(total_gt_3d_quartile/total),'\n')
+
+cat('b) P(X>x|Y>y) is ',(gt_2d_quartile_gt_3d_quartile/total),'\n')
+
+cat('c) P(X<x|Y>y) is ',(leq_2d_quartile_gt_3d_quartile/total)/(total_gt_3d_quartile/total),'\n')
+
+
+```
+
+
+
+
+
+```{r}
+# Calculate probabilities
+P_A_given_B <- table_counts[2, 3] / table_counts[3, 2]
+P_A <- table_counts[3, 2] / table_counts[3, 3]
+P_B <- (table_counts[2, 2] + table_counts[2, 3]) / table_counts[3, 3]
+
+# Check if P(A|B) = P(A)P(B)
+P_A_times_P_B <- P_A * P_B
+is_independent <- round(P_A_given_B, 6) == round(P_A_times_P_B, 6)
+
+# Print probabilities and whether variables A and B are independent
+cat("P(A|B) =", P_A_given_B, "\n")
+cat("P(A) =", P_A, "\n")
+cat("P(B) =", P_B, "\n")
+cat("Is P(A|B) equal to P(A)P(B)?", is_independent, "\n")
+
+
+condition_X_greater_x <- train$GrLivArea > x_quartile2
+condition_Y_greater_y <- train$SalePrice > y_quartile2
+table_A_B <- table(condition_X_greater_x, condition_Y_greater_y)
+chisq.test(table_A_B)
+
+```
+
+
+
+Chi-Square shows that there is a strong relationship existed between **GrLivArea and SalesPrice**. The Chi Square yield a value of 483.29  and p-value that is approximately equal to 4.118547e-107 which less than p-value < 2.2e-16. We reject the null hypothesis. 
+
+
+
+
+
+## Descriptive and Inferential Statistics
+
+
+
+
+```{r}
+# summary of train data set and x and y 
+summary(train)
+# summary of x and y 
+summary(X)
+summary(Y)
+
+
+
+# Create a histogram for X (GrLivArea)
+histogram_x <- ggplot(train, aes(x = X)) +
+  geom_histogram(binwidth = 50, fill = "lightblue", color = "black") +
+  labs(title = "Histogram of X (GrLivArea)", x = "GrLivArea", y = "Frequency") +
+  theme_minimal()
+
+# Create a histogram for Y (SalePrice)
+histogram_y <- ggplot(train, aes(x = Y)) +
+  geom_histogram(binwidth = 50000, fill = "lightgreen", color = "black") +
+  labs(title = "Histogram of Y (SalePrice)", x = "SalePrice", y = "Frequency") +
+  theme_minimal()
+
+# Create a density plot for X (GrLivArea)
+density_x <- ggplot(train, aes(x = X)) +
+  geom_density(fill = "lightblue", color = "black") +
+  labs(title = "Density Plot of X (GrLivArea)", x = "GrLivArea", y = "Density") +
+  theme_minimal()
+
+# Create a density plot for Y (SalePrice)
+density_y <- ggplot(train, aes(x = Y)) +
+  geom_density(fill = "lightgreen", color = "black") +
+  labs(title = "Density Plot of Y (SalePrice)", x = "SalePrice", y = "Density") +
+  theme_minimal()
+
+# Create a scatter plot of X vs Y
+scatter_plot <- ggplot(train, aes(x = X, y = Y)) +
+  geom_point(alpha = 0.5, color = "blue") +
+  labs(title = "Scatter Plot of X vs Y", x = "GrLivArea", y = "SalePrice") +
+  theme_minimal()
+
+
+gridExtra::grid.arrange(histogram_x, histogram_y, density_x, density_y, scatter_plot, nrow = 3)
+
+# Step 1: 95% Confidence Interval for the Difference in Mean
+mean_X <- mean(train$GrLivArea, na.rm = TRUE)
+mean_Y <- mean(train$SalePrice, na.rm = TRUE)
+sd_X <- sd(train$GrLivArea, na.rm = TRUE)
+sd_Y <- sd(train$SalePrice, na.rm = TRUE)
+n_X <- sum(!is.na(train$GrLivArea))
+n_Y <- sum(!is.na(train$SalePrice))
+
+diff_mean <- mean_X - mean_Y
+se_diff_mean <- sqrt((sd_X^2 / n_X) + (sd_Y^2 / n_Y))
+margin_error <- qt(0.975, df = n_X + n_Y - 2) * se_diff_mean
+CI_diff_mean <- c(diff_mean - margin_error, diff_mean + margin_error)
+
+# Step 2: Correlation Matrix
+correlation_matrix <- cor(train[, c("GrLivArea", "SalePrice")], use = "complete.obs")
+
+
+
+# Step 1: Invert the Correlation Matrix
+precision_matrix <- solve(correlation_matrix)
+
+# Step 2: Multiply the Correlation Matrix by the Precision Matrix
+result1 <- correlation_matrix %*% precision_matrix
+
+# Step 3: Multiply the Precision Matrix by the Correlation Matrix
+result2 <- precision_matrix %*% correlation_matrix
+
+# Step 4: Principal Components Analysis (PCA)
+pca_result <- prcomp(train[, c("GrLivArea", "SalePrice")], scale. = TRUE)
+
+# Step 5: Interpretation and Discussion
+summary(pca_result)
+# Step 3: Hypothesis Test for Correlation
+Z <- 0.5 * log((1 + correlation_matrix[1, 2]) / (1 - correlation_matrix[1, 2]))
+SE_Z <- 1 / sqrt(n_X - 3)
+margin_error_Z <- qnorm(0.995) * SE_Z
+CI_correlation <- tanh(c(Z - margin_error_Z, Z + margin_error_Z))
+
+# Print results
+cat("95% Confidence Interval for the Difference in Mean:", CI_diff_mean, "\n")
+cat("Correlation Matrix for GrLivArea and SalePrice:", "\n")
+print(correlation_matrix)
+cat("Hypothesis Test for Correlation (GrLivArea and SalePrice):", "\n")
+cat("H0: Correlation = 0, HA: Correlation ≠ 0", "\n")
+cat("99% Confidence Interval for Correlation:", CI_correlation, "\n")
+
+
+
+```
+
+
+The univariate plots show us how the data from X and Y are distributed and presence of outlines . The scatterplot visualize the relationships between the the variables of X and Y. the correlation matrix shows a strong relationship among the variables with correlation of 0.70.
+
+The hypothesis test show there is strong relationship among the variables. we re 99% confident that the true correlation coefficient lie with our range. 
+
+
+
+
+
+```{r}
+
+# Scree plot to visualize variance explained by each principal component
+scree_plot <- ggplot(data.frame(PC = 1:length(pca_result$sdev), Variance = pca_result$sdev^2 / sum(pca_result$sdev^2)), 
+                     aes(x = PC, y = Variance)) +
+  geom_bar(stat = "identity", fill = "skyblue", width = 0.5) +
+  labs(title = "Scree Plot", x = "Principal Component", y = "Proportion of Variance Explained") +
+  theme_minimal()
+
+# Biplot to visualize relationships between original variables and principal components
+biplot <- ggbiplot::ggbiplot(pca_result, labels = c("GrLivArea", "SalePrice"),
+                             ellipse = TRUE, circle = TRUE, var.axes = FALSE) +
+  ggtitle("Biplot of PCA") +
+  theme_minimal()
+
+# Arrange plots in a grid
+library(gridExtra)
+grid.arrange(scree_plot, biplot, nrow = 1)
+
+
+```
+
+
+The Scree Plot represent the eigen values obtained by the Principal component Analysis. The biplot shows the relationships between the original variables (X and Y) and the principal components. The direction and length of the arrows represent the strength and direction of the relationship between the variables and the principal components.
+
+For Principal Component 1 (PC1):
+
+We have Standard deviation 1.3071, Proportion of Variance of 0.8543 and a Cumulative Proportion of 0.8543. PCI has a high standard deviation which explain PC1 captures a significant amount of variability in the data set. PC1 could represent the primary factor influencing the observations in the data set. PC2 captures additional, less dominant patterns or trends in the data.
+
+
+
+
+```{r}
+# Step 1: Shift the skewed variable
+shifted_variable <- train$GrLivArea- min(train$GrLivArea) + 1
+
+# Step 2: Fit exponential distribution
+library(MASS)
+fit_exp <- fitdistr(shifted_variable, densfun = "exponential")
+
+# Step 3: Obtain the optimal value of λ
+lambda <- fit_exp$estimate
+
+# Step 4: Generate 1000 samples from the exponential distribution
+samples <- rexp(1000, lambda)
+
+# Step 5: Plot histograms for comparison
+par(mfrow = c(1, 2)) # Set up a 1x2 grid for plots
+hist(shifted_variable, main = "Original Variable", xlab = "Value", col = "skyblue", border = "white")
+hist(samples, main = "Exponential Distribution", xlab = "Value", col = "lightgreen", border = "white")
+
+# Step 6: Calculate percentiles using CDF of exponential distribution
+percentile_5 <- qexp(0.05, lambda)
+percentile_95 <- qexp(0.95, lambda)
+
+# Step 7: Compute 95% confidence interval from empirical data assuming normality
+mean_var <- mean(shifted_variable)
+sd_var <- sd(shifted_variable)
+CI <- c(mean_var - 1.96 * (sd_var / sqrt(length(shifted_variable))), 
+        mean_var + 1.96 * (sd_var / sqrt(length(shifted_variable))))
+
+# Step 8: Calculate empirical 5th and 95th percentiles
+empirical_percentile_5 <- quantile(shifted_variable, 0.05)
+empirical_percentile_95 <- quantile(shifted_variable, 0.95)
+
+
+# Create a data frame
+empirical_percentiles_df <- data.frame(Percentile = c("5th", "95th"),
+                                       Value = c(empirical_percentile_5, empirical_percentile_95))
+empirical_percentiles_df
+
+```
+
+
+
+The exponential data is much more skewed. The simulated data is not a great fit. we need to use better techniques to improve the skewness. 
+
+
+## Modeling 
+
+we use correlation to pick up the most relevant features to predict Sale Price of a house. For every one-unit increase in Overall quality and finish of the house  (which is likely a rating of overall material and finish of the house), the Sale Price is estimated to increase by $18,566.79$, holding all other variables constant. House with garages that hold more than one cars and additional storage will increase by  $17,578.73$. the model did pretty good. we were able to achieve a R-squared value of 0.8128 suggests that approximately 81.3% of the variability in Sale Price is explained by the predictor variables included in the model. we see that over all quality of the house, the year the house was built and garage space have significant impacts on the Sale Price of the house. 
+
+
+we discovers some outliers when plotting fitted and residual. we see random individual points that fall far from the main cluster of points which means that these outliers could represent observations that are poorly explained by the model or data points with unusual characteristics that require more investigations. 
+
+
+we were able to acheive 0.67155 on kaggle. we are have to improve. you can use other evaluation techniques or use the Principal Component Analysis (PCA) analysis to to reduce the dimensionality of data while preserving as much variance as possible. it is also a technique that remove these outliers. 
+
+
+
+
+```{r}
+# modeling 
+
+#see distribution 
+library(dplyr)
+ggplot(train,aes(x=SalePrice, y= GrLivArea))+geom_point()
+
+
+
+
+# preprocessing data 
+set.seed(123)
+
+
+# transform data to factor and numeric 
+training <- train %>% mutate_if(is.character, as.factor)
+
+testing <- test %>% mutate_if(is.character, as.factor)
+
+# look at the dimetion data set
+cat('training set has',dim(training),'testing set has ', dim(testing))
+training %>% glimpse()
+
+# check if there is any na 
+train %>% 
+  summarize_all(~ sum(is.na(.))) %>% 
+  glimpse()
+
+
+theme_set(theme_classic())
+
+ggplot(data=training, aes(SalePrice)) + 
+  geom_histogram()
+summary(train$SalesPrices)
+
+training_numerical <- training %>% select_if(is.numeric)
+testing_numerical <- testing %>% select_if(is.numeric)
+dim(training_numerical)
+dim(testing_numerical)
+
+#feature selection 
+# Calculate the correlation matrix
+cor_matrix <- cor(training_numerical)
+
+# Plot the correlation matrix
+corrplot(cor_matrix, method = "circle", type = "upper", tl.col = "black", tl.srt = 45)
+
+
+# regression 
+reg <-  lm(SalePrice ~.,data = training_numerical)
+summary(reg)
+
+
+# Select the predictor variables for the regression model
+predictors <- c('MSSubClass',
+                'LotArea', 
+                'OverallQual',
+               'OverallCond',
+                'YearBuilt',
+                'MasVnrArea',
+                'BsmtFinSF1',
+                'X1stFlrSF', 
+                'X2ndFlrSF',
+                'GrLivArea',
+                'BsmtFullBath',
+                'BedroomAbvGr',
+                'KitchenAbvGr',
+                'TotRmsAbvGrd',
+                'GarageYrBlt',
+                'GarageCars',
+                'OpenPorchSF',
+                'ScreenPorch',
+                'PoolArea')
+# Create a new data frame with the predictor variables and the response variable
+regression_data <- training[-1, c(predictors, "SalePrice")]
+# Remove rows with missing values
+regression_data <- na.omit(regression_data)
+# Fit the multiple regression model
+model <- lm(SalePrice ~ ., data = regression_data)
+
+# Print the model summary
+summary(model)
+
+# Read the sample_submission file
+sample_submission <- read.csv("https://raw.githubusercontent.com/karmaggyatso/CUNY_SPS/main/data_605/Final/house-prices-advanced-regression-techniques/sample_submission.csv")
+
+
+# Create a new data frame with only "Id" column
+predictions_df <- data.frame(ID = sample_submission$Id)
+
+
+# Predict the SalePrice using your regression model (replace `model` with your actual model)
+predictions_df$SalePrice <- predict(model, newdata = regression_data)
+
+
+res <- resid(model)
+#produce residual vs. fitted plot
+plot(fitted(model), res)
+
+#add a horizontal line at 0 
+abline(0,0)
+#create Q-Q plot for residuals
+qqnorm(res)
+
+#add a straight diagonal line to the plot
+qqline(res) 
+
+# Write the predictions to a CSV file
+write.csv(predictions_df, file = "predictions.csv", row.names = FALSE)
+# Verify the number of rows in the predictions file
+num_rows <- nrow(predictions_df)
+print(num_rows)  # Should be 1459
+
+```
+
+
+
+
+
+
+![kaggle submission](C:\Users\Warner_Beast\OneDrive\Documents\GitHub\DATA 605 - Computational Mathematics\project\Screenshot 2024-05-12 213936.png)
+
